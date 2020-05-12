@@ -39,7 +39,7 @@ public class ArchivoPropiedades {
 		    	 * y devolvernos el valor en claro.
 		    	 */
 		    	propiedades = new EncryptableProperties(encryptor);
-		    	propiedades.load(new FileInputStream("ZurichData.properties"));
+		    	propiedades.load(new FileInputStream("src\\main\\resources\\ZurichData.properties"));
 
 		        /* Antiguo: borrar cuando funcione el esquema cifrado
 		         * entrada = new FileInputStream("zurich.properties");

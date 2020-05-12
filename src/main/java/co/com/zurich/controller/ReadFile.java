@@ -16,15 +16,13 @@ public class ReadFile {
 	//Se asigna a nuestra variable, el contenido de la ruta establecida en .properties
 	String ruta_archivo = ArchivoPropiedades.getPropiedades().getProperty("route_file");
 	String archivos_procesados = ArchivoPropiedades.getPropiedades().getProperty("procesados");
-	String	archivos_error = ArchivoPropiedades.getPropiedades().getProperty("errores");
+	String archivos_error = ArchivoPropiedades.getPropiedades().getProperty("errores");
 	String pendiente_radicar = ArchivoPropiedades.getPropiedades().getProperty("radicar");
-
 
 	public static void main(String args[]) throws Throwable {
 		ReadFile datos = new ReadFile();
 		datos.listFiles();
 	}
-
 
 	public void listFiles() throws Throwable {
 		try {
@@ -36,13 +34,10 @@ public class ReadFile {
 			File dir = new File(ruta_archivo);
 			String[] ficheros = dir.list();
 
-			if (ficheros == null) {
+			if (ficheros.length <= 0) {
 				System.out.println("No hay ficheros en el directorio especificado");
-			}else { 
-
+			}else {
 				for (int x=0;x<ficheros.length;x++) {
-
-
 					String rutaCompleta = "";
 					rutaCompleta = ruta_archivo +"\\" + ficheros[x];
 					if (ficheros[x].endsWith(".txt") || ficheros[x].endsWith(".TXT")) //selecciona solo los archivox txt
@@ -52,19 +47,16 @@ public class ReadFile {
 						readFile(rutaCompleta,ficheros[x]);
 					}
 				}
-
 				dir = new File(ruta_archivo);
 				ficheros = dir.list();
+			
 				for (int i = 0; i < ficheros.length; i++) {
 					String rutaCompleta = "";
 					rutaCompleta = ruta_archivo +"\\" + ficheros[i];
 					verificacionArchivo(ficheros[i],rutaCompleta);
 				}
-
 			}
-
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
@@ -98,7 +90,6 @@ public class ReadFile {
 
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
@@ -123,7 +114,6 @@ public class ReadFile {
 				rutas(rutaCompleta, archivos_error);
 			} 
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
 	}

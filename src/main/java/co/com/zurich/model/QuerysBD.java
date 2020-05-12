@@ -112,7 +112,29 @@ public class QuerysBD extends ConexionBD {
 							idFuncionario = rs.getInt(1);
 							System.out.println("idFuncionario:  " + idFuncionario);
 						}
-							
+						
+//						INSERCCIÓN TABLA GESTION_CLIENTE_CAPTURA
+						String sqlAnexosGestionClientes = "INSERT INTO `asistemyca_zurich`.`gestion_clientes_captura` (`GESTION_USUARIO_ID`, `GESTION_CLIENTE_ID`, `GESTION_FECHA_DILIGENCIAMIENTO`, `FECHA_GESTION`)"
+								+ " VALUES (?,?,'" + hourdateFormat.format(date) + "', '" + hourdateFormat.format(date) + "')";
+						preparedStatement = conexion.prepareStatement(sqlAnexosGestionClientes); // for insert
+						preparedStatement.setInt(1, idFuncionario); // GESTION_USUARIO_ID
+						preparedStatement.setInt(2, idClient); // GESTION_CLIENTE_ID
+						preparedStatement.executeUpdate();	
+						
+//						INSERCCIÓN TABLA zr_estado_proceso_clientes_sarlaft
+						String sqlAnexosZrEstadoProceso = "INSERT INTO `asistemyca_zurich`.`zr_estado_proceso_clientes_sarlaft`"
+								+ "(`PROCESO_USUARIO_ID`, `PROCESO_CLIENTE_ID`, `PROCESO_FECHA_DILIGENCIAMIENTO`, `ESTADO_PROCESO_ID`, `PROCESO_ACTIVO`,"
+								+ "`FECHA_PROCESO`)"
+								+ " VALUES (?,?,'" + hourdateFormat.format(date) + "', ?, ?, '" + hourdateFormat.format(date) + "')";
+						preparedStatement = conexion.prepareStatement(sqlAnexosZrEstadoProceso); // for insert
+						
+						preparedStatement.setInt(1, idFuncionario); // PROCESO_USUARIO_ID
+						preparedStatement.setInt(2, idClient); // PROCESO_CLIENTE_ID
+						preparedStatement.setInt(3, 1); // ESTADO_PROCESO_ID -- proceso captura
+						preparedStatement.setInt(4, 1); // PROCESO_ACTIVO
+						preparedStatement.executeUpdate();
+						
+//						INSERCION TABLA zr_radicacion
 						String sqlZrRadicacion = "INSERT INTO `asistemyca_zurich`.`zr_radicacion` ("
 								+ "`funcionario_id`, `cliente_id`, `consecutivo`,`numero_planilla`, `tipo_cliente`, "
 								+ "`tipo_medio`, `devuelto`, `separado`, `digitalizado`, `cantidad_separada`, `formulario`,"
@@ -578,7 +600,6 @@ public class QuerysBD extends ConexionBD {
 						preparedStatement.setString(12, dateFormat.format(date).toString()); // created
 
 						preparedStatement.executeUpdate();
-
 					}
 				} catch (Exception ex) {
 					conexion.rollback();
@@ -588,7 +609,6 @@ public class QuerysBD extends ConexionBD {
 					SendMail.enviarcorreo(error, nomArchivo, correoDestinatario.getCorreo());
 					return false;
 				}
-
 			}
 			// End of JDBC transaction
 			conexion.commit(); // commit, if successful
@@ -599,6 +619,7 @@ public class QuerysBD extends ConexionBD {
 
 		} catch (Exception e) {
 			error = "se ha producido un error al procesar el archivo. Por favor revise";
+			System.out.print(error);
 			conexion.rollback();
 			conexion.close();
 			System.out.println("ca2" + e.getMessage());
@@ -635,10 +656,12 @@ public class QuerysBD extends ConexionBD {
 			if (resultado > 0) {
 				return true;
 			} else {
+				System.out.print(resultado);
 				return false;
 			}
 
 		} catch (Exception e) {
+			System.out.println("No hay ficheros en el directorio especificado");
 			return false;
 		}
 

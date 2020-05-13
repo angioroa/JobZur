@@ -4,9 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import co.com.zurich.config.ArchivoPropiedades;
 import co.com.zurich.model.QuerysBD;
@@ -37,6 +42,7 @@ public class ReadFile {
 			if (ficheros.length <= 0) {
 				System.out.println("No hay ficheros en el directorio especificado");
 			}else {
+				
 				for (int x=0;x<ficheros.length;x++) {
 					String rutaCompleta = "";
 					rutaCompleta = ruta_archivo +"\\" + ficheros[x];
@@ -61,6 +67,11 @@ public class ReadFile {
 	}
 
 	public void readFile(String ruta, String nomArchivo) throws Throwable {
+		Date date = new Date();
+		// Se instancian varios formatos de fecha el cual se utilizaran mas adelante
+		DateFormat hourdateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		nomArchivo = nomArchivo + dateFormat; 
 		String cadena;
 		String aux = "";
 		try {
@@ -82,7 +93,7 @@ public class ReadFile {
 				SendMail.enviarcorreo(null, nomArchivo,Destinatario.getCorreo());
 				//System.out.println(correo.getCorreo());
 				System.out.println("todo bien");
-				rutas(ruta, archivos_procesados);
+				rutas(ruta, archivos_procesados );
 
 			} else {
 				System.out.println("No funciono");
@@ -98,9 +109,12 @@ public class ReadFile {
 		try {
 			Path origen = Paths.get(orig);
 			Path destino = Paths.get(desc);
-			Files.move(origen, destino.resolve(origen.getFileName()));
+			
+			Files.move(origen, destino.resolve(origen.getFileName()), StandardCopyOption.REPLACE_EXISTING);
 
-		} catch (Exception e) {
+		} catch (FileAlreadyExistsException ef) {
+			System.out.println(ef.getMessage());
+		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 

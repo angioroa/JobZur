@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
+
 import co.com.zurich.controller.Destinatario;
 import co.com.zurich.controller.SendMail;
 
@@ -57,7 +59,6 @@ public class QuerysBD extends ConexionBD {
 			for (int i = 0; i < separacionDatos.length; i++) {
 				String[] separacionDatosInsert;
 				separacionDatosInsert = separacionDatos[i].split("\\|");
-
 				if (temp == 0) {
 					correoDestinatario = new Destinatario();
 					correoDestinatario.setCorreo(separacionDatosInsert[10]);
@@ -151,7 +152,7 @@ public class QuerysBD extends ConexionBD {
 							separacionDatosInsert[5] = "0";
 						}
 						if(separacionDatosInsert[9].equalsIgnoreCase("")) {
-							separacionDatosInsert[9] = "NULL";
+							separacionDatosInsert[9] = "LEGAL";
 						}
 						if(separacionDatosInsert[11].equalsIgnoreCase("")) {
 							separacionDatosInsert[11] = "1";
@@ -560,8 +561,11 @@ public class QuerysBD extends ConexionBD {
 							if(separacionDatosInsert[4].equalsIgnoreCase("")) {
 								separacionDatosInsert[4] = "0";
 							}
+							if(separacionDatosInsert[5].equalsIgnoreCase("")) {
+								separacionDatosInsert[5] = "1900-01-01";
+							}
 							if(separacionDatosInsert[6].equalsIgnoreCase("")) {
-								separacionDatosInsert[6] = "null";
+								separacionDatosInsert[6] = "1900-01-01";
 							}
 							preparedStatement.setInt(1, idClient); // cliente_id
 							preparedStatement.setInt(2, Integer.parseInt(separacionDatosInsert[1])); // sub_accionista_tipo_documento

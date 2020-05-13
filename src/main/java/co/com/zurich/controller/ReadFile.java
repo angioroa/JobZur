@@ -43,21 +43,20 @@ public class ReadFile {
 				System.out.println("No hay ficheros en el directorio especificado");
 			}else {
 				
-				for (int x=0;x<ficheros.length;x++) {
+				for (int x=0; x <=ficheros.length; x++) {
 					String rutaCompleta = "";
 					rutaCompleta = ruta_archivo +"\\" + ficheros[x];
 					if (ficheros[x].endsWith(".txt") || ficheros[x].endsWith(".TXT")) //selecciona solo los archivox txt
 					{
 						System.out.println(ficheros[x]);
-
 						readFile(rutaCompleta,ficheros[x]);
 					}
 				}
 				dir = new File(ruta_archivo);
 				ficheros = dir.list();
 			
-				for (int i = 0; i < ficheros.length; i++) {
-					String rutaCompleta = "";
+				for (int i = 0; i <= ficheros.length; i++) {
+					String rutaCompleta = " ";
 					rutaCompleta = ruta_archivo +"\\" + ficheros[i];
 					verificacionArchivo(ficheros[i],rutaCompleta);
 				}

@@ -28,6 +28,7 @@ public class JobRead implements Job {
 			
 			ReadFile readFile = new ReadFile();
 			readFile.listFiles();
+			readFile.listFilePdf();
 			
 			fh.close();
 
